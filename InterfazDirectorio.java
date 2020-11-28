@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 public class InterfazDirectorio {
 
 	// codigo propio escribir aqui
-	private ClienteS Operador;
+	private Cliente Operador;
 
 	// autogeneradas
 	private JFrame frame;
@@ -134,26 +134,36 @@ public class InterfazDirectorio {
 	public void clickBotonConectar(ActionEvent e) {
 
 		try {
-			List<Integer> ip = new ArrayList<>();
+			byte[] b= new byte[]{};
 			String contenido;
 			
 			contenido=this.txfIP1.getText();
-			ip.add(Integer.parseInt(contenido)); ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
+			ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
+			b[0]=(byte) Integer.parseInt(contenido);
 			
 			contenido=this.txfIP2.getText();
-			ip.add(Integer.parseInt(contenido)); ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
+			ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
+			b[1]=(byte) Integer.parseInt(contenido);
+			
 			
 			contenido=this.txfIP3.getText();
-			ip.add(Integer.parseInt(contenido)); ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
+			ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
+			b[2]=(byte) Integer.parseInt(contenido);
+			
 			
 			contenido=this.txfIP4.getText();
-			ip.add(Integer.parseInt(contenido)); ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
-
+			ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
+			b[3]=(byte) Integer.parseInt(contenido);
 		
 
 			Integer port = Integer.parseInt(this.txfPuerto.getText());
 			ClaseMetodosAuxiliares.NumeroCorrecto(port);
-			this.Operador = new ClienteS(port, ip);
+			this.Operador = new Cliente(port, b);
+		
+			
+			
+			//Operador.inicioCliente();
+			//decidir si se desea iniciar el modo cliente o el modo servidor
 
 		}
 
