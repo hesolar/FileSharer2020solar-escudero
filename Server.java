@@ -6,6 +6,7 @@ public class Server {
 
 	public static void main(String[] args) {
 
+		boolean b=true;
 		try (ServerSocket ss = new ServerSocket(1111);) {
 
 			while (true) {
