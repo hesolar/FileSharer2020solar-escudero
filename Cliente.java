@@ -123,6 +123,8 @@ public class Cliente { // escudero calvo
 
 	}
 
+	
+	
 	public List<File> getListaLectura() {
 		return listaLectura;
 	}

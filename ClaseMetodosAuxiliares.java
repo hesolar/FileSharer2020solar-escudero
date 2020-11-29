@@ -5,8 +5,7 @@ import java.util.List;
 //clase con métodos auxiliares para no estorbar
 public class ClaseMetodosAuxiliares {
 
-//	public static class HELP{
-	// comprueba si el numero ip es correcto
+	// comprueba si ipcorrecto
 	public static Boolean NumeroCorrecto(Integer i) throws NumberFormatException {
 		
 		if(i < 255 && i > 0) return true;
@@ -25,8 +24,8 @@ public class ClaseMetodosAuxiliares {
 	}
 	
 	
-	//hace la lectura de un directorio;
-		public static List<File> lecturaDirectorio(String nombreDirectorio) {
+	//lectura de un directorio;
+	public static List<File> lecturaDirectorio(String nombreDirectorio) {
 
 			File f = new File(nombreDirectorio);
 

@@ -1,7 +1,10 @@
+import java.awt.Checkbox;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -25,6 +28,9 @@ public class InterfazDirectorio {
 	private JTextField txfListaDescargas;
 	private JTextField txfDescarga;
 	private JTextField txfPuerto;
+	private Checkbox chbModoServidor;
+	private Checkbox chbmodoCliente;
+	private JComboBox CmbDirectorio;
 
 	/**
 	 * Launch the application.
@@ -68,7 +74,7 @@ public class InterfazDirectorio {
 		
 		
 		
-		ntnConectar.setBounds(237, 28, 102, 23);
+		ntnConectar.setBounds(220, 11, 102, 23);
 		frame.getContentPane().add(ntnConectar);
 
 		txfIP1 = new JTextField();
@@ -94,10 +100,6 @@ public class InterfazDirectorio {
 		JList list = new JList();
 		list.setBounds(10, 65, 1, 1);
 		frame.getContentPane().add(list);
-
-		JComboBox CmbDirectorio = new JComboBox();
-		CmbDirectorio.setBounds(10, 87, 164, 125);
-		frame.getContentPane().add(CmbDirectorio);
 
 		JButton btnAdd = new JButton("Add");
 		btnAdd.setBounds(10, 223, 89, 23);
@@ -125,14 +127,77 @@ public class InterfazDirectorio {
 		txfPuerto.setColumns(10);
 		txfPuerto.setBounds(172, 1, 38, 20);
 		frame.getContentPane().add(txfPuerto);
+		
+		chbModoServidor = new Checkbox("Modo Servidor");
+		chbModoServidor.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				chbStateChange(e);
+			}
+		});
+		chbmodoCliente = new Checkbox("Modo Cliente");
+		chbmodoCliente.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				chbStateChange(e);
+			}
+
+			
+		});
+		
+		
+		
+		chbModoServidor.setBounds(334, 29, 89, 22);
+		frame.getContentPane().add(chbModoServidor);
+		chbmodoCliente.setBounds(334, 46, 80, 22);
+		frame.getContentPane().add(chbmodoCliente);
+		
+		CmbDirectorio = new JComboBox();
+		CmbDirectorio.setBounds(16, 69, 164, 125);
+		frame.getContentPane().add(CmbDirectorio);
 
 	}
 	// HASTA AQUI BASICAMENTE
 
 	// tomar la ip y el puerto y crear el primer clienteservidor
 	//se comprueba que los numeros esten bien metidos 
-	public void clickBotonConectar(ActionEvent e) {
+	private void clickBotonConectar(ActionEvent e) {
 
+		try {
+			ComprobarPuertoIp();
+			
+			
+			Integer port = Integer.parseInt(this.txfPuerto.getText());
+			this.Operador = new Cliente(port, ConstruirIp());
+		
+			if(this.chbmodoCliente.getState()) {
+				Operador.inicioCliente();
+				
+				actualizarDirectorios(Operador.getListaLectura());
+			}
+			else 							   Operador.inicioServidor();
+			
+			//Operador.inicioCliente();
+			//decidir si se desea iniciar el modo cliente o el modo servidor
+
+		}
+
+		catch (NumberFormatException f) {
+			JOptionPane.showMessageDialog(null,"Error en el formato númerico", "Error en formato númerico", 0, null);
+		}
+
+	}
+	
+	private void actualizarDirectorios(List<File> lf) {
+		
+		this.CmbDirectorio.removeAllItems();
+		for(File f:lf) {
+			
+			this.CmbDirectorio.addItem(f.getName());
+		}
+	}
+	
+	//comprueba que los formatos sean correctos
+	private boolean ComprobarPuertoIp() {
+		
 		try {
 			byte[] b= new byte[]{};
 			String contenido;
@@ -158,25 +223,44 @@ public class InterfazDirectorio {
 
 			Integer port = Integer.parseInt(this.txfPuerto.getText());
 			ClaseMetodosAuxiliares.NumeroCorrecto(port);
-			this.Operador = new Cliente(port, b);
 		
-			
-			
-			//Operador.inicioCliente();
-			//decidir si se desea iniciar el modo cliente o el modo servidor
-
+			return true;
 		}
-
+		
+	
 		catch (NumberFormatException f) {
 			JOptionPane.showMessageDialog(null,"Error en el formato númerico", "Error en formato númerico", 0, null);
+			return false;
+		}
+		
+		
+		
+	}
+	
+	//construyo la ip con los tb.text
+	private byte[] ConstruirIp() {
+		
+		byte[] b= new byte[]{};
+		
+		
+		b[0]=(byte) Integer.parseInt(this.txfIP1.getText());
+		b[1]=(byte) Integer.parseInt(this.txfIP2.getText());
+		b[2]=(byte) Integer.parseInt(this.txfIP3.getText());
+		b[3]=(byte) Integer.parseInt(this.txfIP4.getText());
+
+		return b;
+		
+	}
+	
+	
+	//bloquear que el modo servidor y cliente se activen a la vez
+	private void chbStateChange(ItemEvent e) {
+		if(this.chbmodoCliente.getState()&&this.chbModoServidor.getState()) {
+			JOptionPane.showMessageDialog(null,"Error", "No puede activar ambos modos a la vez", 0, null);
+			Checkbox a= (Checkbox)e.getItemSelectable();
+			a.setState(false);
 		}
 
+		
 	}
-
-	
-	
-	
-	
-	
-
 }
