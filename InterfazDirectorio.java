@@ -66,11 +66,8 @@ public class InterfazDirectorio {
 		frame.getContentPane().setLayout(null);
 
 		JButton ntnConectar = new JButton("Conectar");
-		ntnConectar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				clickBotonConectar(e);
-			}
-		});
+		ntnConectar.addActionListener(e->clickBotonConectar(e));
+		
 		
 		
 		
@@ -129,19 +126,17 @@ public class InterfazDirectorio {
 		frame.getContentPane().add(txfPuerto);
 		
 		chbModoServidor = new Checkbox("Modo Servidor");
-		chbModoServidor.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				chbStateChange(e);
-			}
-		});
+		
+		
+		chbModoServidor.addItemListener(c->chbStateChange(c));
+		
+		
 		chbmodoCliente = new Checkbox("Modo Cliente");
-		chbmodoCliente.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				chbStateChange(e);
-			}
+		chbmodoCliente.addItemListener(e->	chbStateChange(e));
+			
 
 			
-		});
+	
 		
 		
 		
@@ -203,27 +198,37 @@ public class InterfazDirectorio {
 			String contenido;
 			
 			contenido=this.txfIP1.getText();
+			if(contenido.length()==0)throw new NumberFormatException();
 			ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
 			b[0]=(byte) Integer.parseInt(contenido);
 			
+			
 			contenido=this.txfIP2.getText();
+			if(contenido.length()==0)throw new NumberFormatException();
 			ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
 			b[1]=(byte) Integer.parseInt(contenido);
 			
 			
 			contenido=this.txfIP3.getText();
+			if(contenido.length()==0)throw new NumberFormatException();
 			ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
 			b[2]=(byte) Integer.parseInt(contenido);
 			
 			
 			contenido=this.txfIP4.getText();
+			if(contenido.length()==0)throw new NumberFormatException();
 			ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
 			b[3]=(byte) Integer.parseInt(contenido);
 		
 
 			Integer port = Integer.parseInt(this.txfPuerto.getText());
+			if(this.txfPuerto.getText().length()==0)throw new NumberFormatException();
+
 			ClaseMetodosAuxiliares.NumeroCorrecto(port);
 		
+			
+			
+			
 			return true;
 		}
 		

@@ -8,12 +8,13 @@ public class ClaseMetodosAuxiliares {
 	// comprueba si ipcorrecto
 	public static Boolean NumeroCorrecto(Integer i) throws NumberFormatException {
 		
-		if(i < 255 && i > 0) return true;
+		if(i < 255 && i > 0 && i!=null) return true;
 		else throw new NumberFormatException();
 	}
 
 	public static Boolean NumeroCorrecto(String i) throws NumberFormatException {
 
+		if(i==null)throw new NumberFormatException();
 		Integer x = Integer.parseInt(i);
 		
 		
