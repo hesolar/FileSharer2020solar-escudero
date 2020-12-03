@@ -74,8 +74,8 @@ public class Servidor {
 		
 		File f = new File(path);
 		try(FileInputStream fis= new FileInputStream(f);){
-			
-			dos.writeBytes(f.getPath()+"\r\n");
+			System.out.println(ClaseMetodosAuxiliares.conversorDireccionesRelativas(f.getPath()));
+			dos.writeBytes(ClaseMetodosAuxiliares.conversorDireccionesRelativas(f.getPath())+"\r\n");
 			byte b[]= new byte[1024]; int leidos;
 			
 			while((leidos=fis.read(b))!=-1){
