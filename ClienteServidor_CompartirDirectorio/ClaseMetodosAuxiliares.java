@@ -109,4 +109,41 @@ public class ClaseMetodosAuxiliares {
 			}
 
 		}
+	
+	
+	//Ruta absoluta: se indica toda la ruta del archivo incluyendo el directorio raíz. Por ejemplo, C:\carpeta1\carpeta2\archivo1.doc
+	
+	//Ruta relativa: se indica la ruta a partir de donde este en ese momento situado. No se incluye el directorio raíz. Por ejemplo, si estamos en la ruta C:\carpeta1 y queremos acceder al archivo1 que esta dentro de la carpeta2, seria carpeta2\archivo1. 
+	 //Para ir al directorio padre, usamos dos puntos seguidos (..)
+	
+	
+//	*si directorio tipo: cd c\\users\\usuario  el path es directamente es c\\users\\usuario
+//	*si  llega : cd usuario , añadiremos al path la nueva subcarpeta : path\\usuario
+	public static String conversorDireccionesAbsolutas(String ruta,String dirRaiz) {
+		
+
+		if (ruta.contains("\\"))return ruta; 	 			
+		else return dirRaiz+= "\\" + ruta;
+
+		
+		
+		
+	}
+
+	//dada una dirección absoluta c\\users\\usuario devuelve usuario
+public static String conversorDireccionesRelativas(String ruta) {
+		
+
+		if (ruta.contains("\\")) {
+			
+			return ruta.substring(ruta.lastIndexOf("\\")+1,ruta.length());
+			
+		}
+		else return ruta;
+
+		
+		
+		
+	}
+	
 }

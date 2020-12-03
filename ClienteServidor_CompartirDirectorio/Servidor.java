@@ -3,12 +3,15 @@ package ClienteServidor_CompartirDirectorio;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Servidor {
 
@@ -43,18 +46,14 @@ public class Servidor {
 	
 	
 	
-//FUNCIONALIDADES SERVIDOR : mostrar,cd,.., directorio	
+//FUNCIONALIDADES SERVIDOR : mostrar,cd,.., directorio, select
 	
 	
 //	  aplica funcionalidad cd, 
-//	*si directorio tipo: cd c\\users\\usuario  el path es directamente es c\\users\\usuario
-//	*si  llega : cd usuario , añadiremos al path la nueva subcarpeta : path\\usuario	 
+	 
 	public static void cd(String linea,DataOutputStream dos) {
 		String a[] = linea.split(" ");
-
-		if (linea.contains("\\"))path = a[1]; 	 			
-		else path = path + "\\" + a[1];
-			
+		path=ClaseMetodosAuxiliares.conversorDireccionesAbsolutas(a[1],path);	
 		ClaseMetodosAuxiliares.EnviarDirectorioPorSalida(dos,new File(path));
 	}
 	
@@ -66,10 +65,40 @@ public class Servidor {
 		ClaseMetodosAuxiliares.EnviarDirectorioPorSalida(dos, f);
 	}
 	
+	//Selecciona un archivo y lo envía
+	private static void select(DataOutputStream dos, String linea) {
+		
+		String lineaPorEspacios[]=linea.split(" ");
+		path=ClaseMetodosAuxiliares.conversorDireccionesAbsolutas(lineaPorEspacios[1], path);
+		
+		
+		File f = new File(path);
+		try(FileInputStream fis= new FileInputStream(f);){
+			
+			dos.writeBytes(f.getPath()+"\r\n");
+			byte b[]= new byte[1024]; int leidos;
+			
+			while((leidos=fis.read(b))!=-1){
+				dos.write(b,0,leidos);
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+	}
+	
 //----------------------------------------------------------------------\\
 
 	public static void main(String[] args) {
 		ServerSocket ss;
+//		ExecutorService pool = Executors.newCachedThreadPool();
+
 		path = "C:\\";
 		try {
 			ss = new ServerSocket(1111);
@@ -85,6 +114,7 @@ public class Servidor {
 					if (linea.startsWith("cd")) cd(linea,dos);
 					if (linea.equalsIgnoreCase("..")) dosPuntos(dos);
 					if (linea.startsWith("show")) ClaseMetodosAuxiliares.EnviarDirectorioPorSalida(dos, new File(path));
+					if (linea.startsWith("select")) select(dos,linea);
 					
 					s.shutdownOutput();
 				} catch (IOException e) {
@@ -100,5 +130,9 @@ public class Servidor {
 		}
 
 	}
+
+
+
+
 
 }
