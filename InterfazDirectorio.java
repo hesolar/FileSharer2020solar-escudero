@@ -14,6 +14,8 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import ClienteServidor_CompartirDirectorio.ClaseMetodosAuxiliares;
+
 public class InterfazDirectorio {
 
 	// codigo propio escribir aqui

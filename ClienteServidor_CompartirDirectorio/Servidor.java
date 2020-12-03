@@ -18,6 +18,8 @@ public class Servidor {
 		this.path = s;
 	}
 
+	
+	
 	public String getPath() {
 		return this.path;
 	}
@@ -34,84 +36,56 @@ public class Servidor {
 			return this.listado;
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+//FUNCIONALIDADES SERVIDOR : mostrar,cd,.., directorio	
+	
+	
+//	  aplica funcionalidad cd, 
+//	*si directorio tipo: cd c\\users\\usuario  el path es directamente es c\\users\\usuario
+//	*si  llega : cd usuario , añadiremos al path la nueva subcarpeta : path\\usuario	 
+	public static void cd(String linea,DataOutputStream dos) {
+		String a[] = linea.split(" ");
+
+		if (linea.contains("\\"))path = a[1]; 	 			
+		else path = path + "\\" + a[1];
+			
+		ClaseMetodosAuxiliares.EnviarDirectorioPorSalida(dos,new File(path));
+	}
+	
+//	  aplica funcionalidad .., cambia al directorio padre el directorio de trabajo
+	public static void dosPuntos(DataOutputStream dos) {
+		File f = new File(path);
+		f = f.getParentFile();
+		path = f.getPath();
+		ClaseMetodosAuxiliares.EnviarDirectorioPorSalida(dos, f);
+	}
+	
+//----------------------------------------------------------------------\\
 
 	public static void main(String[] args) {
 		ServerSocket ss;
 		path = "C:\\";
 		try {
 			ss = new ServerSocket(1111);
-
+			
 			while (true) {
 				try {
 					Socket s = ss.accept();
 					DataInputStream dis = new DataInputStream(s.getInputStream());
 					DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 					String linea = dis.readLine();
-					if (linea.contains("cd")) {
-						String a[] = linea.split(" ");
-
-						if (linea.contains("\\")) {
-							path = a[1];
-
-						}
-
-						else {
-							path = path + "\\" + a[1];
-						}
-
-						dos.writeBytes("new Path:" + path + "\n");
-						File f = new File(path);
-
-						if (f.listFiles() != null) {
-							for (File x : f.listFiles()) {
-								dos.writeBytes(x.getName() + "\r\n");
-
-							}
-							dos.flush();
-						}
-
-					}
-//
-					if (linea.equalsIgnoreCase("..")) {
-						File f = new File(path);
-
-						f = f.getParentFile();
-
-						path = f.getPath();
-						dos.writeBytes("new Path:" + path + "\n");
-
-						List<String> names = new ArrayList<>();
-						for (File x : f.listFiles()) {
-							dos.writeBytes(x.getName() + "\r\n");
-
-						}
-						dos.flush();
-
-					}
-
-					if (linea.split(" ").length == 1 && !linea.contains("..")) {
-
-						File f;
-						if(linea.contains("mostrar")) f= new File(path);
-						
-						else 	f= new File(linea);
-						 
-						
-						
-						List<String> names = new ArrayList<>();
-						for (File x : f.listFiles()) {
-							dos.writeBytes(x.getName() + "\r\n");
-
-						}
-						dos.flush();
-//						
-						path = linea;
 					
-					}
-					if (linea.split(" ") == null) {
-						File f = new File(path);
-					}
-
+					
+					if (linea.startsWith("cd")) cd(linea,dos);
+					if (linea.equalsIgnoreCase("..")) dosPuntos(dos);
+					if (linea.startsWith("show")) ClaseMetodosAuxiliares.EnviarDirectorioPorSalida(dos, new File(path));
+					
 					s.shutdownOutput();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

@@ -11,6 +11,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import ClienteServidor_CompartirDirectorio.ClaseMetodosAuxiliares;
+
 public class Cliente { // escudero calvo
 
 	
