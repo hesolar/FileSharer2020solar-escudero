@@ -57,7 +57,7 @@ public class Servidor {
 		linea=CA.conversorDireccionesAbsolutas(linea,path);
 		File f= new File(linea);
 		
-		if(!f.isDirectory()) {
+		if(!f.exists()) {
 			try {
 				dos.writeBytes("Directorio Erroneo, vuelves a: " + path);
 				
