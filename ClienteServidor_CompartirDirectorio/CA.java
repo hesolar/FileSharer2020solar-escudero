@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //clase con métodos auxiliares para no estorbar
-public class ClaseMetodosAuxiliares {
+public class CA {
 
 	// comprueba si el número puede formar parte de una ipcorrecta
 	public static Boolean NumeroCorrecto(Integer i) throws NumberFormatException {
@@ -160,8 +160,8 @@ public class ClaseMetodosAuxiliares {
 		
 		
 		
-		for(int i=1;i<ListaEspacios.length-1;i++) {
-			resultado=resultado+ListaEspacios[i];
+		for(int i=1;i<=ListaEspacios.length-1;i++) {
+			resultado=resultado+" "+ListaEspacios[i];
 		}
 		
 		System.out.println(resultado);

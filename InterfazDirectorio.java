@@ -14,7 +14,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import ClienteServidor_CompartirDirectorio.ClaseMetodosAuxiliares;
+import ClienteServidor_CompartirDirectorio.CA;
 
 public class InterfazDirectorio {
 
@@ -201,32 +201,32 @@ public class InterfazDirectorio {
 			
 			contenido=this.txfIP1.getText();
 			if(contenido.length()==0)throw new NumberFormatException();
-			ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
+			CA.NumeroCorrecto(contenido);
 			b[0]=(byte) Integer.parseInt(contenido);
 			
 			
 			contenido=this.txfIP2.getText();
 			if(contenido.length()==0)throw new NumberFormatException();
-			ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
+			CA.NumeroCorrecto(contenido);
 			b[1]=(byte) Integer.parseInt(contenido);
 			
 			
 			contenido=this.txfIP3.getText();
 			if(contenido.length()==0)throw new NumberFormatException();
-			ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
+			CA.NumeroCorrecto(contenido);
 			b[2]=(byte) Integer.parseInt(contenido);
 			
 			
 			contenido=this.txfIP4.getText();
 			if(contenido.length()==0)throw new NumberFormatException();
-			ClaseMetodosAuxiliares.NumeroCorrecto(contenido);
+			CA.NumeroCorrecto(contenido);
 			b[3]=(byte) Integer.parseInt(contenido);
 		
 
 			Integer port = Integer.parseInt(this.txfPuerto.getText());
 			if(this.txfPuerto.getText().length()==0)throw new NumberFormatException();
 
-			ClaseMetodosAuxiliares.NumeroCorrecto(port);
+			CA.NumeroCorrecto(port);
 		
 			
 			

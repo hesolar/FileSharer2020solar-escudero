@@ -52,9 +52,26 @@ public class Servidor {
 //	  aplica funcionalidad cd, 
 	 
 	public static void cd(String linea,DataOutputStream dos) {
-		String a[] = linea.split(" ");
-		path=ClaseMetodosAuxiliares.conversorDireccionesAbsolutas(a[1],path);	
-		ClaseMetodosAuxiliares.EnviarDirectorioPorSalida(dos,new File(path));
+		
+		linea=CA.CortarOrdenFichero(linea);
+		linea=CA.conversorDireccionesAbsolutas(linea,path);
+		File f= new File(linea);
+		
+		if(!f.isDirectory()) {
+			try {
+				dos.writeBytes("Directorio Erroneo, vuelves a: " + path);
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		else path=CA.conversorDireccionesAbsolutas(linea,path);	
+
+		
+		
+//		ClaseMetodosAuxiliares.EnviarDirectorioPorSalida(dos,new File(path));
 	}
 	
 //	  aplica funcionalidad .., cambia al directorio padre el directorio de trabajo
@@ -62,20 +79,20 @@ public class Servidor {
 		File f = new File(path);
 		f = f.getParentFile();
 		path = f.getPath();
-		ClaseMetodosAuxiliares.EnviarDirectorioPorSalida(dos, f);
+		CA.EnviarDirectorioPorSalida(dos, f);
 	}
 	
 	//Selecciona un archivo y lo envía
 	private static void select(DataOutputStream dos, String linea) {
 		
 		String lineaPorEspacios[]=linea.split(" ");
-		path=ClaseMetodosAuxiliares.conversorDireccionesAbsolutas(lineaPorEspacios[1], path);
+		path=CA.conversorDireccionesAbsolutas(lineaPorEspacios[1], path);
 		
 		
 		File f = new File(path);
 		try(FileInputStream fis= new FileInputStream(f);){
-			System.out.println(ClaseMetodosAuxiliares.conversorDireccionesRelativas(f.getPath()));
-			dos.writeBytes(ClaseMetodosAuxiliares.conversorDireccionesRelativas(f.getPath())+"\r\n");
+			System.out.println(CA.conversorDireccionesRelativas(f.getPath()));
+			dos.writeBytes(CA.conversorDireccionesRelativas(f.getPath())+"\r\n");
 			byte b[]= new byte[1024]; int leidos;
 			
 			while((leidos=fis.read(b))!=-1){
@@ -100,33 +117,33 @@ private static void selectall(DataOutputStream dos, String linea) {
 
 //		String nombreFichero= ClaseMetodosAuxiliares.CortarOrdenFichero(linea);//sale " " arreglar para q haya ficheros con espacios en el nombre
 
-	String lista[]=	linea.split(" ");
-	String nombreFichero=lista[1];
-	
-		path=ClaseMetodosAuxiliares.conversorDireccionesAbsolutas(nombreFichero, path);
-		path=path+"\\";
-		System.out.println(path);		
-		File directorio = new File(path);
-
-		File archivos[]= directorio.listFiles();
-		
-		System.out.println(f.getAbsolutePath());
-		try(FileInputStream fis= new FileInputStream(f);){
-			System.out.println(ClaseMetodosAuxiliares.conversorDireccionesRelativas(f.getPath()));
-			dos.writeBytes(ClaseMetodosAuxiliares.conversorDireccionesRelativas(f.getPath())+"\r\n");
-			byte b[]= new byte[1024]; int leidos;
-			
-			while((leidos=fis.read(b))!=-1){
-				dos.write(b,0,leidos);
-			}
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+//	String lista[]=	linea.split(" ");
+//	String nombreFichero=lista[1];
+//	
+//		path=ClaseMetodosAuxiliares.conversorDireccionesAbsolutas(nombreFichero, path);
+//		path=path+"\\";
+//		System.out.println(path);		
+//		File directorio = new File(path);
+//
+//		File archivos[]= directorio.listFiles();
+//		
+//		System.out.println(f.getAbsolutePath());
+//		try(FileInputStream fis= new FileInputStream(f);){
+//			System.out.println(ClaseMetodosAuxiliares.conversorDireccionesRelativas(f.getPath()));
+//			dos.writeBytes(ClaseMetodosAuxiliares.conversorDireccionesRelativas(f.getPath())+"\r\n");
+//			byte b[]= new byte[1024]; int leidos;
+//			
+//			while((leidos=fis.read(b))!=-1){
+//				dos.write(b,0,leidos);
+//			}
+//			
+//		} catch (FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 		
 		
 	}
@@ -151,7 +168,7 @@ private static void selectall(DataOutputStream dos, String linea) {
 					
 					if (linea.startsWith("cd")) cd(linea,dos);
 					if (linea.equalsIgnoreCase("..")) dosPuntos(dos);
-					if (linea.startsWith("show")) ClaseMetodosAuxiliares.EnviarDirectorioPorSalida(dos, new File(path));
+					if (linea.startsWith("show")) CA.EnviarDirectorioPorSalida(dos, new File(path));
 					if (linea.startsWith("select")) {
 						if(linea.startsWith("selectall")) selectall(dos,linea);
 						else select(dos,linea);

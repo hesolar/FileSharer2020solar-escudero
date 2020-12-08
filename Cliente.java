@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import ClienteServidor_CompartirDirectorio.ClaseMetodosAuxiliares;
+import ClienteServidor_CompartirDirectorio.CA;
 
 public class Cliente { // escudero calvo
 
@@ -112,7 +112,7 @@ public class Cliente { // escudero calvo
 				ObjectOutputStream o = new ObjectOutputStream(s.getOutputStream());
 				DataInputStream dis = new DataInputStream(s.getInputStream());) {
 
-				this.listaLectura = ClaseMetodosAuxiliares.lecturaDirectorio(dis.readLine());
+				this.listaLectura = CA.lecturaDirectorio(dis.readLine());
 				Objetos obs= new Objetos(this.listaLectura);
 				o.writeObject(obs);
 				o.flush();
