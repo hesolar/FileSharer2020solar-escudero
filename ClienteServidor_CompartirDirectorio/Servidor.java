@@ -85,8 +85,8 @@ public class Servidor {
 	//Selecciona un archivo y lo envía
 	private static void select(DataOutputStream dos, String linea) {
 		
-		String lineaPorEspacios[]=linea.split(" ");
-		path=CA.conversorDireccionesAbsolutas(lineaPorEspacios[1], path);
+		
+		path=CA.conversorDireccionesAbsolutas(CA.CortarOrdenFichero(linea), path);
 		
 		
 		File f = new File(path);
@@ -148,6 +148,30 @@ private static void selectall(DataOutputStream dos, String linea) {
 		
 	}
 	
+private static void selectallseq(DataOutputStream dos, String linea) {
+
+	
+	System.out.println(linea);
+	File carpeta= new File(linea);
+	
+	for(File f: carpeta.listFiles()) {
+		if(f.isDirectory()) {
+			selectallseq(dos,f.getPath());
+		}
+		
+	     select(dos,f.getAbsolutePath());
+	}
+	
+}
+
+
+
+
+
+
+
+
+
 //----------------------------------------------------------------------\\
 
 	public static void main(String[] args) {
@@ -170,8 +194,17 @@ private static void selectall(DataOutputStream dos, String linea) {
 					if (linea.equalsIgnoreCase("..")) dosPuntos(dos);
 					if (linea.startsWith("show")) CA.EnviarDirectorioPorSalida(dos, new File(path));
 					if (linea.startsWith("select")) {
-						if(linea.startsWith("selectall")) selectall(dos,linea);
+						
+						
+						
+						if(linea.startsWith("selectall")) {
+							linea=CA.CortarOrdenFichero(linea);
+							linea=CA.conversorDireccionesAbsolutas(linea, path);
+							selectallseq(dos,linea);
+						}
 						else select(dos,linea);
+						
+					
 					}
 					
 					s.shutdownOutput();
