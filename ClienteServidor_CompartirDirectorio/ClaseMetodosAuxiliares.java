@@ -131,7 +131,7 @@ public class ClaseMetodosAuxiliares {
 	}
 
 	//dada una dirección absoluta c\\users\\usuario devuelve usuario
-public static String conversorDireccionesRelativas(String ruta) {
+	public static String conversorDireccionesRelativas(String ruta) {
 		
 
 		if (ruta.contains("\\")) {
@@ -145,5 +145,30 @@ public static String conversorDireccionesRelativas(String ruta) {
 		
 		
 	}
+	
+	
+	//dado un file cortar la orden y el nombre del file
+	//devuelve el nombre del file
+	
+	//arreglar no funciona
+	public static String CortarOrdenFichero(String Linea) {
+	
+		System.out.println(Linea);
+		String resultado="";
+		String ListaEspacios[]=Linea.split(" ");
+		
+		
+		
+		
+		for(int i=1;i<ListaEspacios.length-1;i++) {
+			resultado=resultado+ListaEspacios[i];
+		}
+		
+		System.out.println(resultado);
+		return resultado;
+		
+	}
+	
+	
 	
 }

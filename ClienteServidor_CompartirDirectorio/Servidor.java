@@ -93,6 +93,44 @@ public class Servidor {
 		
 	}
 	
+	
+	
+private static void selectall(DataOutputStream dos, String linea) {
+
+
+//		String nombreFichero= ClaseMetodosAuxiliares.CortarOrdenFichero(linea);//sale " " arreglar para q haya ficheros con espacios en el nombre
+
+	String lista[]=	linea.split(" ");
+	String nombreFichero=lista[1];
+	
+		path=ClaseMetodosAuxiliares.conversorDireccionesAbsolutas(nombreFichero, path);
+		path=path+"\\";
+		System.out.println(path);		
+		File directorio = new File(path);
+
+		File archivos[]= directorio.listFiles();
+		
+		System.out.println(f.getAbsolutePath());
+		try(FileInputStream fis= new FileInputStream(f);){
+			System.out.println(ClaseMetodosAuxiliares.conversorDireccionesRelativas(f.getPath()));
+			dos.writeBytes(ClaseMetodosAuxiliares.conversorDireccionesRelativas(f.getPath())+"\r\n");
+			byte b[]= new byte[1024]; int leidos;
+			
+			while((leidos=fis.read(b))!=-1){
+				dos.write(b,0,leidos);
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+	}
+	
 //----------------------------------------------------------------------\\
 
 	public static void main(String[] args) {
@@ -114,7 +152,10 @@ public class Servidor {
 					if (linea.startsWith("cd")) cd(linea,dos);
 					if (linea.equalsIgnoreCase("..")) dosPuntos(dos);
 					if (linea.startsWith("show")) ClaseMetodosAuxiliares.EnviarDirectorioPorSalida(dos, new File(path));
-					if (linea.startsWith("select")) select(dos,linea);
+					if (linea.startsWith("select")) {
+						if(linea.startsWith("selectall")) selectall(dos,linea);
+						else select(dos,linea);
+					}
 					
 					s.shutdownOutput();
 				} catch (IOException e) {
