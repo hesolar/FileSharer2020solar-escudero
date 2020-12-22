@@ -21,10 +21,10 @@ public class Cliente {
 	public static void seleccionDirectorioTrabajo() {
 		System.out.println("INTRODUCE DONDE SE GUARDARAN TUS ARCHIVOS DESCARGADOS");
 		Scanner es = new Scanner(System.in);
-//		String linea=es.nextLine();
+		String linea=es.nextLine();
 		
-//		File f = new File(linea);
-		File f = new File("C:\\Users\\usuario\\Desktop\\workspace");
+		File f = new File(linea);
+		//File f = new File("C:\\Users\\usuario\\Desktop\\workspace");
 		//----------------arreglar
 		if(f.isDirectory()) path= f.getAbsolutePath();
 		else {
@@ -60,18 +60,14 @@ public class Cliente {
 					
 					else {
 					
-					
-					
-					dos.writeBytes(s1+"\r\n");
-					String a;
-					while((a=dis.readLine())!=null) {
-						System.out.println(a);
-						
-					}
-					
+						dos.writeBytes(s1+"\r\n");
+						String a;
+						while((a=dis.readLine())!=null) {
+							System.out.println(a);
+							
+						}
 					}
 				}
-				
 			}
 			
 			
