@@ -151,7 +151,6 @@ public class CA {
 	// dado un file cortar la orden y el nombre del file
 	// devuelve el nombre del file
 
-	// arreglar no funciona
 	public static String CortarOrdenFichero(String Linea) {
 
 		System.out.println(Linea);
@@ -161,5 +160,6 @@ public class CA {
 		return ListaEspacios[1];
 
 	}
+
 
 }

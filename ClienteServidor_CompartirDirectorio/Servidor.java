@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.ServerSocket;
@@ -12,6 +13,8 @@ import java.net.Socket;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class Servidor {
 
@@ -21,8 +24,6 @@ public class Servidor {
 		this.path = s;
 	}
 
-	
-	
 	public String getPath() {
 		return this.path;
 	}
@@ -39,41 +40,33 @@ public class Servidor {
 			return this.listado;
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
+
 //FUNCIONALIDADES SERVIDOR : mostrar,cd,.., directorio, select
-	
-	
+
 //	  aplica funcionalidad cd, 
-	 
-	public static void cd(String linea,DataOutputStream dos) {
-		
-		linea=CA.CortarOrdenFichero(linea);
-		linea=CA.conversorDireccionesAbsolutas(linea,path);
-		File f= new File(linea);
-		
-		if(!f.exists()) {
+
+	public static void cd(String linea, DataOutputStream dos) {
+
+		linea = CA.CortarOrdenFichero(linea);
+		linea = CA.conversorDireccionesAbsolutas(linea, path);
+		File f = new File(linea);
+
+		if (!f.exists()) {
 			try {
 				dos.writeBytes("Directorio Erroneo, vuelves a: " + path);
-				
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
-		else path=CA.conversorDireccionesAbsolutas(linea,path);	
 
-		
-		
+		else
+			path = CA.conversorDireccionesAbsolutas(linea, path);
+
 //		ClaseMetodosAuxiliares.EnviarDirectorioPorSalida(dos,new File(path));
 	}
-	
+
 //	  aplica funcionalidad .., cambia al directorio padre el directorio de trabajo
 	public static void dosPuntos(DataOutputStream dos) {
 		File f = new File(path);
@@ -81,24 +74,23 @@ public class Servidor {
 		path = f.getPath();
 		CA.EnviarDirectorioPorSalida(dos, f);
 	}
-	
-	//Selecciona un archivo y lo envía
+
+	// Selecciona un archivo y lo envía
 	private static void select(DataOutputStream dos, String linea) {
-		
-		
-		path=CA.conversorDireccionesAbsolutas(CA.CortarOrdenFichero(linea), path);
-		
-		
+
+		path = CA.conversorDireccionesAbsolutas(CA.CortarOrdenFichero(linea), path);
+
 		File f = new File(path);
-		try(FileInputStream fis= new FileInputStream(f);){
+		try (FileInputStream fis = new FileInputStream(f);) {
 			System.out.println(CA.conversorDireccionesRelativas(f.getPath()));
-			dos.writeBytes(CA.conversorDireccionesRelativas(f.getPath())+"\r\n");
-			byte b[]= new byte[1024]; int leidos;
-			
-			while((leidos=fis.read(b))!=-1){
-				dos.write(b,0,leidos);
+			dos.writeBytes(CA.conversorDireccionesRelativas(f.getPath()) + "\r\n");
+			byte b[] = new byte[1024];
+			int leidos;
+
+			while ((leidos = fis.read(b)) != -1) {
+				dos.write(b, 0, leidos);
 			}
-			
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -106,71 +98,46 @@ public class Servidor {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		
+
 	}
-	
-	
-	
-private static void selectall(DataOutputStream dos, String linea) {
 
+	private static void selectAll(DataOutputStream dos, String linea) {
 
-//		String nombreFichero= ClaseMetodosAuxiliares.CortarOrdenFichero(linea);//sale " " arreglar para q haya ficheros con espacios en el nombre
+		File f = new File(CA.CortarOrdenFichero(linea));
+		if (f.isFile())select(dos, linea);
+			
 
-//	String lista[]=	linea.split(" ");
-//	String nombreFichero=lista[1];
-//	
-//		path=ClaseMetodosAuxiliares.conversorDireccionesAbsolutas(nombreFichero, path);
-//		path=path+"\\";
-//		System.out.println(path);		
-//		File directorio = new File(path);
-//
-//		File archivos[]= directorio.listFiles();
-//		
-//		System.out.println(f.getAbsolutePath());
-//		try(FileInputStream fis= new FileInputStream(f);){
-//			System.out.println(ClaseMetodosAuxiliares.conversorDireccionesRelativas(f.getPath()));
-//			dos.writeBytes(ClaseMetodosAuxiliares.conversorDireccionesRelativas(f.getPath())+"\r\n");
-//			byte b[]= new byte[1024]; int leidos;
-//			
-//			while((leidos=fis.read(b))!=-1){
-//				dos.write(b,0,leidos);
-//			}
-//			
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-		
-		
-	}
-	
-private static void selectallseq(DataOutputStream dos, String linea) {
+		else {
+			
+			
+			try (FileOutputStream fos = new FileOutputStream(f);
+					ZipOutputStream zipOut = new ZipOutputStream(fos);
+					FileInputStream fis = new FileInputStream(f);
 
-	
-	System.out.println(linea);
-	File carpeta= new File(linea);
-	
-	for(File f: carpeta.listFiles()) {
-		if(f.isDirectory()) {
-			selectallseq(dos,f.getPath());
+			) {
+				f.createNewFile();
+				ZipEntry zipEntry = new ZipEntry(f.getName());
+				zipOut.putNextEntry(zipEntry);
+
+				byte[] bytes = new byte[1024];
+				int length;
+				while ((length = fis.read(bytes)) >= 0) {
+					zipOut.write(bytes, 0, length);
+				}
+
+				select(dos, f.getPath());
+//				f.delete();
+
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
-		
-	     select(dos,f.getAbsolutePath());
 	}
-	
-}
-
-
-
-
-
-
-
-
 
 //----------------------------------------------------------------------\\
 
@@ -181,32 +148,31 @@ private static void selectallseq(DataOutputStream dos, String linea) {
 		path = "C:\\";
 		try {
 			ss = new ServerSocket(1111);
-			
+
 			while (true) {
 				try {
 					Socket s = ss.accept();
 					DataInputStream dis = new DataInputStream(s.getInputStream());
 					DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 					String linea = dis.readLine();
-					
-					
-					if (linea.startsWith("cd")) cd(linea,dos);
-					if (linea.equalsIgnoreCase("..")) dosPuntos(dos);
-					if (linea.startsWith("show")) CA.EnviarDirectorioPorSalida(dos, new File(path));
+
+					if (linea.startsWith("cd"))
+						cd(linea, dos);
+					if (linea.equalsIgnoreCase(".."))
+						dosPuntos(dos);
+					if (linea.startsWith("show"))
+						CA.EnviarDirectorioPorSalida(dos, new File(path));
 					if (linea.startsWith("select")) {
-						
-						
-						
-						if(linea.startsWith("selectall")) {
-							linea=CA.CortarOrdenFichero(linea);
-							linea=CA.conversorDireccionesAbsolutas(linea, path);
-							selectallseq(dos,linea);
-						}
-						else select(dos,linea);
-						
-					
+
+						if (linea.startsWith("selectall")) {
+							linea = CA.CortarOrdenFichero(linea);
+							linea = CA.conversorDireccionesAbsolutas(linea, path);
+							selectAll(dos, linea);
+						} else
+							select(dos, linea);
+
 					}
-					
+
 					s.shutdownOutput();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -221,9 +187,5 @@ private static void selectallseq(DataOutputStream dos, String linea) {
 		}
 
 	}
-
-
-
-
 
 }
