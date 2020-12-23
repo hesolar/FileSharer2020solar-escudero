@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import ClienteServidor_CompartirDirectorio.CA;
 
 public class InterfazDirectorio {
-
+	
 	// codigo propio escribir aqui
 	private Cliente Operador;
 
