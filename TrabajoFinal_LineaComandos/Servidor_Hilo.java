@@ -1,4 +1,4 @@
-package ClienteServidor_CompartirDirectorio;
+package TrabajoFinal_LineaComandos;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -61,7 +61,7 @@ public class Servidor_Hilo implements Runnable {
 
 	// Selecciona un archivo y lo envía
 	private static void select(DataOutputStream dos, String linea) {
-
+		String oldPath=path;
 		path = CA.conversorDireccionesAbsolutas(CA.CortarFichero(linea), path);
 
 		File f = new File(path);
@@ -80,7 +80,7 @@ public class Servidor_Hilo implements Runnable {
 			}
 			
 			
-			
+			path=oldPath;
 			
 			
 			
@@ -97,40 +97,16 @@ public class Servidor_Hilo implements Runnable {
 	}
 
 	private static void selectAll(DataOutputStream dos, String linea) {
-
-		File f = new File(CA.CortarFichero(linea));
-		if (f.isFile())
-			select(dos, linea);
-
-		else {
-
-			try (FileOutputStream fos = new FileOutputStream(f);
-					ZipOutputStream zipOut = new ZipOutputStream(fos);
-					FileInputStream fis = new FileInputStream(f);
-
-			) {
-				f.createNewFile();
-				ZipEntry zipEntry = new ZipEntry(f.getName());
-				zipOut.putNextEntry(zipEntry);
-
-				byte[] bytes = new byte[1024];
-				int length;
-				while ((length = fis.read(bytes)) >= 0) {
-					zipOut.write(bytes, 0, length);
-				}
-
-				select(dos, f.getPath());
-//				f.delete();
-
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
+		linea=CA.CortarFichero(linea);
+		File f = new File(linea);
+		String destino=f.getParent()+File.separator+"a.zip";
+		path=f.getParent();
+	ZipUses.ZipDirectory(linea, destino);
+	select(dos,"select " +destino);
+//	select(dos,linea);
+	
+		f.delete();
+		
 	}
 
 //----------------------------------------------------------------------\\
@@ -175,8 +151,6 @@ public class Servidor_Hilo implements Runnable {
 					
 					break;
 				case "selectall":
-					linea = CA.CortarFichero(linea);
-					linea = CA.conversorDireccionesAbsolutas(linea, path);
 					selectAll(dos, linea);
 					break;
 				case "exit":
