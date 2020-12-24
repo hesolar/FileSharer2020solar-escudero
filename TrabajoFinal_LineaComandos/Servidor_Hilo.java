@@ -97,14 +97,27 @@ public class Servidor_Hilo implements Runnable {
 	}
 
 	private static void selectAll(DataOutputStream dos, String linea) {
+		
+		File f;
+		String destino;
+		
+
+		if(path.equals("C:\\")){
+		f = new File(linea);
 		linea=CA.CortarFichero(linea);
-		File f = new File(linea);
-		String destino=f.getParent()+File.separator+"a.zip";
+		}
+		else {
+			f=new File(path+File.separator+CA.CortarFichero(linea));
+			linea=path+File.separator+CA.CortarFichero(linea);
+
+		}
+		
+		destino=f.getParent()+File.separator+"a.zip";
 		path=f.getParent();
-	ZipUses.ZipDirectory(linea, destino);
-	select(dos,"select " +destino);
-//	select(dos,linea);
-	
+		
+		ZipUses.ZipDirectory(linea, destino);
+		select(dos,"select " +destino);	
+		f= new File(destino);
 		f.delete();
 		
 	}
@@ -116,15 +129,30 @@ public class Servidor_Hilo implements Runnable {
 		boolean b = true;
 		DataInputStream dis = null;
 		DataOutputStream dos = null;
-		
+		String linea=null;
+
 		
 		while (b) {
 			try {
+				
+				
+				
 				dis = new DataInputStream(s.getInputStream());
 				dos = new DataOutputStream(s.getOutputStream());
+				linea=dis.readLine();
+				
+				
+				if(linea==null||s.isInputShutdown()||s.isOutputShutdown()||s.isClosed()) {
+					b=false;
+					linea="exit";
+					
+				}
+				else {
+				
 
-				String linea = dis.readLine();
-
+				
+				
+				
 				String orden;
 				//.. cd .... cd hola
 				if (linea.split(" ").length > 1)orden = CA.CortarOrden(linea);
@@ -155,20 +183,22 @@ public class Servidor_Hilo implements Runnable {
 					break;
 				case "exit":
 					b = false;
-					s.close();
+					
 					break;
 				default:
 					dos.writeBytes("Comando erroneo \r\n");
 					dos.writeBytes(";\r\n");
 					break;
 				}
+				}
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		
 		}
-
+	
 	}
 
 }

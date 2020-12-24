@@ -1,4 +1,4 @@
-package ClienteServidor_CompartirDirectorio;
+package TrabajoFinal_LineaComandos;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -52,15 +52,13 @@ public class ZipUses
 	
     public static void ZipDirectory(String sourceFile, String sourceDestination){
         
-        FileOutputStream fos;
-		try {
-			fos = new FileOutputStream(sourceDestination);
-			  ZipOutputStream zipOut = new ZipOutputStream(fos);
-			  File fileToZip = new File(sourceFile);
-
-			  zipFile(fileToZip, fileToZip.getName(), zipOut);
-			  zipOut.close();
-			  fos.close();
+		try(FileOutputStream fos = new FileOutputStream(sourceDestination);
+			ZipOutputStream zipOut = new ZipOutputStream(fos);){
+			
+			File fileToZip = new File(sourceFile);
+			zipFile(fileToZip, fileToZip.getName(), zipOut);
+			zipOut.close();
+			fos.close();
 			
 			
 		} catch (FileNotFoundException e) {

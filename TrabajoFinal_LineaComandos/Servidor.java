@@ -1,4 +1,4 @@
-package ClienteServidor_CompartirDirectorio;
+package TrabajoFinal_LineaComandos;
 
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -1,4 +1,4 @@
-package ClienteServidor_CompartirDirectorio;
+package TrabajoFinal_LineaComandos;
 
 import java.io.DataOutputStream;
 import java.io.File;

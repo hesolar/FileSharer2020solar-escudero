@@ -1,4 +1,4 @@
-package ClienteServidor_CompartirDirectorio;
+package TrabajoFinal_LineaComandos;
 
 
 import java.io.DataInputStream;
@@ -45,19 +45,23 @@ public class Cliente {
 			Socket s = new Socket("5.225.247.38",1111);
 			DataInputStream dis = null;
 			DataOutputStream dos = null;
-			while(end) {
+			while(end && !s.isClosed()) {
 				dis=new DataInputStream(s.getInputStream());
 				dos = new DataOutputStream(s.getOutputStream());
 				System.out.println("\nINTRODUCE ORDEN\n");
 				s1=es.nextLine();
 				
-				if(s1.equalsIgnoreCase("exit"))end=false;		
+				if(s1.equalsIgnoreCase("exit")||s1==null)end=false;		
 				
 				else {
 					
-					if(s1.startsWith("select")) select(dos,dis,s1); 
-
-					else {
+					if(s1.startsWith("select")){
+						if(s1.startsWith("selectall")) {
+							selectall(dos,dis,s1);
+						}else{
+							select(dos,dis,s1); 
+						}
+					}else {
 					
 						dos.writeBytes(s1+"\r\n");
 						String a;
@@ -69,6 +73,9 @@ public class Cliente {
 					}
 				}
 			}
+			s.shutdownInput();
+			s.shutdownOutput();
+			s.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,7 +93,7 @@ public class Cliente {
 			dos.writeBytes(LineaLeida + "\r\n");
 			
 			long tamaño = dis.readLong();
-	
+			
 			String pathNuevo=path+"\\"+dis.readLine();
 			System.out.println("el path nuevo es"+pathNuevo);
 			File f = new File(pathNuevo);
@@ -130,5 +137,14 @@ public class Cliente {
 				}
 		}
 		
+		
 	}
+	
+	public static void selectall(DataOutputStream dos, DataInputStream dis, String LineaLeida) {
+			select(dos, dis, LineaLeida);
+			ZipUses.UnzipDirectory(path+"\\a.zip",path);
+			File f = new File(path+"\\a.zip");
+			f.delete();
+	}
+	
 }
