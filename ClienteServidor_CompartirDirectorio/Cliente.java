@@ -42,35 +42,33 @@ public class Cliente {
 
 			Scanner es = new Scanner(System.in);
 			boolean end=true;
+			Socket s = new Socket("5.225.247.38",1111);
+			DataInputStream dis = null;
+			DataOutputStream dos = null;
 			while(end) {
+				dis=new DataInputStream(s.getInputStream());
+				dos = new DataOutputStream(s.getOutputStream());
 				System.out.println("\nINTRODUCE ORDEN\n");
 				s1=es.nextLine();
-				
 				
 				if(s1.equalsIgnoreCase("exit"))end=false;		
 				
 				else {
-					Socket s = new Socket("localhost",1111);
-					DataInputStream dis=new DataInputStream(s.getInputStream());
-					DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-					
 					
 					if(s1.startsWith("select")) select(dos,dis,s1); 
-						
-					
+
 					else {
 					
 						dos.writeBytes(s1+"\r\n");
 						String a;
-						while((a=dis.readLine())!=null) {
+						a=dis.readLine();
+						while(a!=null && !a.equals(";")) {
 							System.out.println(a);
-							
+							a=dis.readLine();
 						}
 					}
 				}
 			}
-			
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,22 +82,39 @@ public class Cliente {
 	public static void select(DataOutputStream dos, DataInputStream dis, String LineaLeida) {
 		
 		FileOutputStream fos=null;
-		try {
+		try {		
 			dos.writeBytes(LineaLeida + "\r\n");
-
+			
+			long tamaño = dis.readLong();
+	
 			String pathNuevo=path+"\\"+dis.readLine();
 			System.out.println("el path nuevo es"+pathNuevo);
 			File f = new File(pathNuevo);
 			
 			System.out.println("\n La nueva ubicación del es: " + f.getAbsolutePath() + "\n");
 
-			fos = new FileOutputStream(f);
-			byte b[] = new byte[1024];
-			int leidos;
-			while ((leidos = dis.read(b)) != -1) {
-				fos.write(b, 0, leidos);
-			}
+			fos = new FileOutputStream(f);	
 			
+			
+			byte[] b = new byte[1024];
+            long leidos = 0;
+            long restantes = tamaño;
+            long auxRestantes;
+
+            while (leidos != -1 && restantes > 0) {
+                leidos = dis.read(b);
+
+                auxRestantes =  restantes;
+                restantes = restantes - leidos;
+
+                if (restantes > 0) {
+                    fos.write(b, 0, (int) leidos);
+                    fos.flush();
+                } else {
+                    fos.write(b, 0, (int) auxRestantes);
+                    fos.flush();
+                }
+            }
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -116,11 +131,4 @@ public class Cliente {
 		}
 		
 	}
-	
-	
-	
-	
-	
-	
-	
 }

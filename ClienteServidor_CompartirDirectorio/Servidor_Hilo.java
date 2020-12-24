@@ -22,24 +22,7 @@ public class Servidor_Hilo implements Runnable {
 	private static Socket s;
 
 	public Servidor_Hilo(Socket soc) {
-		s=soc;
-	}
-
-	public String getPath() {
-		return this.path;
-	}
-
-	public class Objetos implements Serializable {
-		private final long SerialVersionUID = 111L;
-		private List<File> listado;
-
-		public Objetos(List<File> f) {
-			this.listado = f;
-		}
-
-		public List<File> getListado() {
-			return this.listado;
-		}
+		s = soc;
 	}
 
 //FUNCIONALIDADES SERVIDOR : mostrar,cd,.., directorio, select
@@ -54,7 +37,7 @@ public class Servidor_Hilo implements Runnable {
 
 		if (!f.exists()) {
 			try {
-				dos.writeBytes("Directorio Erroneo, vuelves a: " + path);
+				dos.writeBytes("Directorio Erroneo, vuelves a: " + path +"\r\n");
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -84,13 +67,24 @@ public class Servidor_Hilo implements Runnable {
 		File f = new File(path);
 		try (FileInputStream fis = new FileInputStream(f);) {
 			System.out.println(CA.conversorDireccionesRelativas(f.getPath()));
+			
+			dos.writeLong(f.length());
 			dos.writeBytes(CA.conversorDireccionesRelativas(f.getPath()) + "\r\n");
 			byte b[] = new byte[1024];
 			int leidos;
 
+			
+			
 			while ((leidos = fis.read(b)) != -1) {
 				dos.write(b, 0, leidos);
 			}
+			
+			
+			
+			
+			
+			
+			
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -105,12 +99,11 @@ public class Servidor_Hilo implements Runnable {
 	private static void selectAll(DataOutputStream dos, String linea) {
 
 		File f = new File(CA.CortarFichero(linea));
-		if (f.isFile())select(dos, linea);
-			
+		if (f.isFile())
+			select(dos, linea);
 
 		else {
-			
-			
+
 			try (FileOutputStream fos = new FileOutputStream(f);
 					ZipOutputStream zipOut = new ZipOutputStream(fos);
 					FileInputStream fis = new FileInputStream(f);
@@ -144,47 +137,57 @@ public class Servidor_Hilo implements Runnable {
 
 	public void run() {
 		path = "C:\\";
-	    boolean b = true;
-	    DataInputStream dis=null;
-	    DataOutputStream dos=null;
+		boolean b = true;
+		DataInputStream dis = null;
+		DataOutputStream dos = null;
+		
+		
 		while (b) {
 			try {
 				dis = new DataInputStream(s.getInputStream());
 				dos = new DataOutputStream(s.getOutputStream());
+
 				String linea = dis.readLine();
-				String orden = CA.CortarOrden(linea);
-				String dest = CA.CortarFichero(linea);
-				
-					switch(orden) {
-						case "cd":
-						if(new File(dest).exists()) {
-							cd(linea, dos);
-						}else {
-							dos.writeBytes("Destino erroneo \r\n");
-						}
-						break;
-						case "..":
-							dosPuntos(dos);
-						break;
-						case "show":
-							CA.EnviarDirectorioPorSalida(dos, new File(path));
-						break;
-						case "select":
-							select(dos, linea);
-						break;
-						case "selectall":
-							linea = CA.CortarFichero(linea);
-							linea = CA.conversorDireccionesAbsolutas(linea, path);
-							selectAll(dos, linea);
-						break;
-						case "exit":
-							b=false;
-							s.close();
-						break;
-						default:
-							dos.writeBytes("Comando erroneo \r\n");
-	                    break;
-					}
+
+				String orden;
+				//.. cd .... cd hola
+				if (linea.split(" ").length > 1)orden = CA.CortarOrden(linea);
+					
+				else orden = linea;
+					
+
+				switch (orden) {
+				case "cd":
+
+					cd(linea, dos);
+					dos.writeBytes(";\r\n");
+					break;
+				case "..":
+					dosPuntos(dos);
+					dos.writeBytes(";\r\n");
+					break;
+				case "show":
+					CA.EnviarDirectorioPorSalida(dos, new File(path));
+					dos.writeBytes(";\r\n");
+					break;
+				case "select":
+					select(dos, linea);
+					
+					break;
+				case "selectall":
+					linea = CA.CortarFichero(linea);
+					linea = CA.conversorDireccionesAbsolutas(linea, path);
+					selectAll(dos, linea);
+					break;
+				case "exit":
+					b = false;
+					s.close();
+					break;
+				default:
+					dos.writeBytes("Comando erroneo \r\n");
+					dos.writeBytes(";\r\n");
+					break;
+				}
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
