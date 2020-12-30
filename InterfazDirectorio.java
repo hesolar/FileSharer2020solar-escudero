@@ -43,9 +43,12 @@ public class InterfazDirectorio {
 	private Checkbox chbModoServidor;
 	private Checkbox chbmodoCliente;
 	private JLabel lblClientesConectados;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField txfRecursosClonados;
+	private JTextField txfDirectorioActual;
+	private JTextField txfDirectorioDestino;
+	private JLabel lblDirectorioDondeSe;
+	private JLabel lblDirectorioDondeTe;
+	private JPanel pnlServidor;
 
 	/**
 	 * Launch the application.
@@ -137,81 +140,89 @@ public class InterfazDirectorio {
 		lblPuerto.setBounds(230, 13, 46, 14);
 		frame.getContentPane().add(lblPuerto);
 		
-		JPanel panelServidor = new JPanel();
-		panelServidor.setBackground(Color.WHITE);
-		panelServidor.setBounds(10, 41, 251, 259);
-		frame.getContentPane().add(panelServidor);
-		panelServidor.setLayout(null);
+		JPanel pnlCliente = new JPanel();
+		pnlCliente.setBackground(Color.WHITE);
+		pnlCliente.setBounds(10, 41, 251, 259);
+		frame.getContentPane().add(pnlCliente);
+		pnlCliente.setLayout(null);
 		
 		JLabel lblCliente = new JLabel("Cliente");
 		lblCliente.setVerticalAlignment(SwingConstants.TOP);
 		lblCliente.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblCliente.setBounds(96, 11, 43, 14);
-		panelServidor.add(lblCliente);
+		pnlCliente.add(lblCliente);
 		lblCliente.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JLabel lblDirectorioActual = new JLabel("Directorio Actual");
 		lblDirectorioActual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblDirectorioActual.setBounds(10, 76, 102, 14);
-		panelServidor.add(lblDirectorioActual);
+		lblDirectorioActual.setBounds(10, 99, 102, 14);
+		pnlCliente.add(lblDirectorioActual);
 		
-		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setBounds(122, 73, 119, 20);
-		panelServidor.add(textField_1);
-		textField_1.setColumns(10);
+		txfDirectorioActual = new JTextField();
+		txfDirectorioActual.setEditable(false);
+		txfDirectorioActual.setBounds(122, 96, 119, 20);
+		pnlCliente.add(txfDirectorioActual);
+		txfDirectorioActual.setColumns(10);
 		
 		JLabel lblDirectorioDestino = new JLabel("Directorio Destino");
 		lblDirectorioDestino.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblDirectorioDestino.setBounds(10, 45, 102, 14);
-		panelServidor.add(lblDirectorioDestino);
+		pnlCliente.add(lblDirectorioDestino);
 		
-		textField_2 = new JTextField();
-		textField_2.setEditable(false);
-		textField_2.setColumns(10);
-		textField_2.setBounds(122, 42, 119, 20);
-		panelServidor.add(textField_2);
+		txfDirectorioDestino = new JTextField();
+		txfDirectorioDestino.setEditable(false);
+		txfDirectorioDestino.setColumns(10);
+		txfDirectorioDestino.setBounds(122, 42, 119, 20);
+		pnlCliente.add(txfDirectorioDestino);
 		
-		JPanel panelCliente = new JPanel();
-		panelCliente.setBackground(Color.DARK_GRAY);
-		panelCliente.setBounds(273, 41, 251, 259);
-		frame.getContentPane().add(panelCliente);
-		panelCliente.setLayout(null);
+		lblDirectorioDondeSe = new JLabel("Directorio donde se guardar\u00E1n los archivos");
+		lblDirectorioDondeSe.setBounds(20, 70, 205, 14);
+		pnlCliente.add(lblDirectorioDondeSe);
+		
+		lblDirectorioDondeTe = new JLabel("Directorio del servidor en el que te encuentras");
+		lblDirectorioDondeTe.setBounds(20, 124, 231, 14);
+		pnlCliente.add(lblDirectorioDondeTe);
+		
+		pnlServidor = new JPanel();
+		pnlServidor.setBackground(Color.DARK_GRAY);
+		pnlServidor.setBounds(273, 41, 251, 259);
+		frame.getContentPane().add(pnlServidor);
+		pnlServidor.setLayout(null);
 		
 		JLabel lblServidor = new JLabel("Servidor");
 		lblServidor.setBounds(101, 11, 48, 14);
 		lblServidor.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblServidor.setHorizontalAlignment(SwingConstants.CENTER);
 		lblServidor.setForeground(Color.WHITE);
-		panelCliente.add(lblServidor);
+		pnlServidor.add(lblServidor);
 		
 		lblClientesConectados = new JLabel("Clientes Conectados");
 		lblClientesConectados.setForeground(Color.WHITE);
 		lblClientesConectados.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblClientesConectados.setBounds(10, 39, 106, 14);
-		panelCliente.add(lblClientesConectados);
+		pnlServidor.add(lblClientesConectados);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(10, 65, 106, 22);
-		panelCliente.add(comboBox);
+		JComboBox cmbClientesConectados = new JComboBox();
+		cmbClientesConectados.setBounds(10, 65, 106, 22);
+		pnlServidor.add(cmbClientesConectados);
 		
 		JLabel lblRecursosClonaados = new JLabel("Recursos Clonados");
 		lblRecursosClonaados.setForeground(Color.WHITE);
 		lblRecursosClonaados.setFont(new Font("Tahoma", Font.BOLD, 10));
 		lblRecursosClonaados.setBounds(135, 39, 106, 14);
-		panelCliente.add(lblRecursosClonaados);
+		pnlServidor.add(lblRecursosClonaados);
 		
-		textField = new JTextField();
-		textField.setBounds(126, 64, 115, 184);
-		panelCliente.add(textField);
-		textField.setColumns(10);
+		txfRecursosClonados = new JTextField();
+		txfRecursosClonados.setBounds(126, 64, 115, 184);
+		pnlServidor.add(txfRecursosClonados);
+		txfRecursosClonados.setColumns(10);
 		
 		JButton btnExpulsar = new JButton("Expulsar");
 		btnExpulsar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnExpulsar.setBackground(Color.RED);
 		btnExpulsar.setForeground(new Color(0, 0, 0));
 		btnExpulsar.setBounds(20, 98, 89, 23);
-		panelCliente.add(btnExpulsar);
+		pnlServidor.add(btnExpulsar);
 
 	}
 	// HASTA AQUI BASICAMENTE
