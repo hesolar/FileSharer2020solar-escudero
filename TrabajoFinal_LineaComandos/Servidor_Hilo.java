@@ -135,8 +135,6 @@ public class Servidor_Hilo implements Runnable {
 		while (b) {
 			try {
 				
-				
-				
 				dis = new DataInputStream(s.getInputStream());
 				dos = new DataOutputStream(s.getOutputStream());
 				linea=dis.readLine();

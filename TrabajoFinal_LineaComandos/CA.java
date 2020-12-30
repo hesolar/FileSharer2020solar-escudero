@@ -1,8 +1,12 @@
 package TrabajoFinal_LineaComandos;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,4 +174,22 @@ public class CA {
 		return ListaEspacios[0];
 
 	}
+	
+	 public static String ipPublica() {
+		URL whatismyip;
+		String ip = "No se pudo obtener ip pública";
+		BufferedReader in=null;
+		try {
+			whatismyip = new URL("http://checkip.amazonaws.com");
+			in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+			ip = in.readLine();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally {
+			return ip;
+		}
+	 }
 }
