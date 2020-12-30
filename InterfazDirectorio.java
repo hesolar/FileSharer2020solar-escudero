@@ -60,6 +60,8 @@ public class InterfazDirectorio {
 	private JTextField textField;
 	private JLabel lblExpulsarClientes;
 	private JButton btnConectar;
+	private JLabel lblTuIpPublica;
+	private JTextField textField_1;
 	
 	/**
 	 * Launch the application.
@@ -186,7 +188,6 @@ public class InterfazDirectorio {
 		pnlCliente.add(lblDirectorioDestino);
 		
 		txfDirectorioDestino = new JTextField();
-		txfDirectorioDestino.setEditable(false);
 		txfDirectorioDestino.setColumns(10);
 		txfDirectorioDestino.setBounds(122, 42, 198, 20);
 		pnlCliente.add(txfDirectorioDestino);
@@ -251,11 +252,11 @@ public class InterfazDirectorio {
 		lblClientesConectados = new JLabel("Clientes Conectados");
 		lblClientesConectados.setForeground(Color.WHITE);
 		lblClientesConectados.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblClientesConectados.setBounds(10, 39, 106, 14);
+		lblClientesConectados.setBounds(21, 98, 106, 14);
 		pnlServidor.add(lblClientesConectados);
 		
 		JComboBox cmbClientesConectados = new JComboBox();
-		cmbClientesConectados.setBounds(10, 286, 106, 22);
+		cmbClientesConectados.setBounds(21, 286, 106, 22);
 		pnlServidor.add(cmbClientesConectados);
 		
 		JLabel lblRecursosClonaados = new JLabel("Recursos Clonados");
@@ -273,19 +274,33 @@ public class InterfazDirectorio {
 		btnExpulsar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnExpulsar.setBackground(Color.RED);
 		btnExpulsar.setForeground(new Color(0, 0, 0));
-		btnExpulsar.setBounds(20, 319, 89, 23);
+		btnExpulsar.setBounds(21, 319, 106, 23);
 		pnlServidor.add(btnExpulsar);
 		
 		textField = new JTextField();
-		textField.setBounds(10, 64, 106, 186);
+		textField.setBounds(21, 123, 106, 127);
 		pnlServidor.add(textField);
 		textField.setColumns(10);
 		
 		lblExpulsarClientes = new JLabel("Expulsar Clientes");
+		lblExpulsarClientes.setHorizontalAlignment(SwingConstants.CENTER);
 		lblExpulsarClientes.setForeground(Color.WHITE);
 		lblExpulsarClientes.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblExpulsarClientes.setBounds(10, 261, 106, 14);
+		lblExpulsarClientes.setBounds(21, 261, 106, 14);
 		pnlServidor.add(lblExpulsarClientes);
+		
+		lblTuIpPublica = new JLabel("Tu IP Publica");
+		lblTuIpPublica.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTuIpPublica.setForeground(Color.WHITE);
+		lblTuIpPublica.setFont(new Font("Tahoma", Font.BOLD, 10));
+		lblTuIpPublica.setBounds(20, 39, 106, 14);
+		pnlServidor.add(lblTuIpPublica);
+		
+		textField_1 = new JTextField();
+		textField_1.setEditable(false);
+		textField_1.setColumns(10);
+		textField_1.setBounds(20, 65, 106, 22);
+		pnlServidor.add(textField_1);
 		
 		btnConectar = new JButton("Conectar");
 		btnConectar.setBounds(326, 9, 92, 23);
