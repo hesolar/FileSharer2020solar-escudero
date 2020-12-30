@@ -28,12 +28,18 @@ import javax.swing.GroupLayout.Alignment;
 import java.awt.Font;
 import javax.swing.JSpinner;
 import javax.swing.JFormattedTextField;
+import javax.swing.JTree;
+import javax.swing.JSlider;
+import javax.swing.JScrollBar;
+import javax.swing.JTable;
+import javax.swing.JToggleButton;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.Dialog.ModalExclusionType;
+import java.awt.Window.Type;
 
 public class InterfazDirectorio {
 	
-	// codigo propio escribir aqui
-	private Cliente Operador;
-
 	// autogeneradas
 	private JFrame frame;
 	private JTextField txfIP1;
@@ -45,23 +51,18 @@ public class InterfazDirectorio {
 	private Checkbox chbmodoCliente;
 	private JLabel lblClientesConectados;
 	private JTextField txfRecursosClonados;
-	private JTextField txfDirectorioActual;
-	private JTextField txfDirectorioDestino;
-	private JLabel lblDirectorioDondeSe;
 	private JPanel pnlCliente;
 	private JPanel pnlServidor;
-	private JButton btnIr;
-	private JButton btnAtras;
-	private JComboBox cmbSeleccionarDirectorio;
-	private JComboBox comboBox_1;
-	private JLabel lblArchivos;
-	private JButton btnAñadir;
-	private JButton btnEliminar;
 	private JTextField textField;
 	private JLabel lblExpulsarClientes;
 	private JButton btnConectar;
-	private JLabel lblTuIpPublica;
-	private JTextField textField_1;
+	private JLabel lblSeleccionarDestino;
+	private JTable table;
+	private JLabel lblFicheroOrigen;
+	private JButton btnClonar;
+	private JPanel pnlArbolSeleccionados;
+	private JPanel pnlArbolSeleccionados_1;
+	private JTree tree_3;
 	
 	/**
 	 * Launch the application.
@@ -93,7 +94,7 @@ public class InterfazDirectorio {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setResizable(false);
-		frame.setBounds(100, 100, 692, 458);
+		frame.setBounds(100, 100, 705, 472);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -167,74 +168,74 @@ public class InterfazDirectorio {
 		JLabel lblCliente = new JLabel("Cliente");
 		lblCliente.setVerticalAlignment(SwingConstants.TOP);
 		lblCliente.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblCliente.setBounds(135, 11, 43, 14);
+		lblCliente.setBounds(10, 11, 310, 14);
 		pnlCliente.add(lblCliente);
 		lblCliente.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		JLabel lblDirectorioActual = new JLabel("Directorio Actual");
-		lblDirectorioActual.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblDirectorioActual.setBounds(10, 115, 102, 14);
-		pnlCliente.add(lblDirectorioActual);
+		lblSeleccionarDestino = new JLabel("Fichero Destino");
+		lblSeleccionarDestino.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSeleccionarDestino.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblSeleccionarDestino.setBounds(10, 36, 142, 14);
+		pnlCliente.add(lblSeleccionarDestino);
 		
-		txfDirectorioActual = new JTextField();
-		txfDirectorioActual.setEditable(false);
-		txfDirectorioActual.setBounds(123, 112, 197, 20);
-		pnlCliente.add(txfDirectorioActual);
-		txfDirectorioActual.setColumns(10);
+		table = new JTable();
+		table.setBounds(201, 315, 1, 1);
+		pnlCliente.add(table);
 		
-		JLabel lblDirectorioDestino = new JLabel("Directorio Destino");
-		lblDirectorioDestino.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblDirectorioDestino.setBounds(10, 45, 102, 14);
-		pnlCliente.add(lblDirectorioDestino);
+		lblFicheroOrigen = new JLabel("Seleccionar Archivos ");
+		lblFicheroOrigen.setHorizontalAlignment(SwingConstants.CENTER);
+		lblFicheroOrigen.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblFicheroOrigen.setBounds(178, 36, 142, 14);
+		pnlCliente.add(lblFicheroOrigen);
 		
-		txfDirectorioDestino = new JTextField();
-		txfDirectorioDestino.setColumns(10);
-		txfDirectorioDestino.setBounds(122, 42, 198, 20);
-		pnlCliente.add(txfDirectorioDestino);
+		btnClonar = new JButton("Clonar");
+		btnClonar.setBackground(Color.GREEN);
+		btnClonar.setForeground(Color.BLACK);
+		btnClonar.setBounds(113, 257, 89, 23);
+		pnlCliente.add(btnClonar);
 		
-		lblDirectorioDondeSe = new JLabel("Directorio donde se guardar\u00E1n los archivos");
-		lblDirectorioDondeSe.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDirectorioDondeSe.setBounds(10, 70, 310, 31);
-		pnlCliente.add(lblDirectorioDondeSe);
+		pnlArbolSeleccionados = new JPanel();
+		pnlArbolSeleccionados.setBounds(10, 56, 149, 190);
+		pnlCliente.add(pnlArbolSeleccionados);
+		pnlArbolSeleccionados.setLayout(null);
 		
-		btnIr = new JButton("Ir");
-		btnIr.setBackground(Color.GREEN);
-		btnIr.setForeground(Color.BLACK);
-		btnIr.setFont(new Font("Tahoma", Font.BOLD, 8));
-		btnIr.setBounds(160, 155, 75, 23);
-		pnlCliente.add(btnIr);
+		JTree treDestino = new JTree();
+		treDestino.setBounds(0, 0, 149, 190);
+		pnlArbolSeleccionados.add(treDestino);
+		treDestino.setModel(new DefaultTreeModel(
+			new DefaultMutableTreeNode("C://") {
+				{
+					DefaultMutableTreeNode node_1;
+					node_1 = new DefaultMutableTreeNode("colors");
+						node_1.add(new DefaultMutableTreeNode("blue"));
+						node_1.add(new DefaultMutableTreeNode("violet"));
+						node_1.add(new DefaultMutableTreeNode("red"));
+						node_1.add(new DefaultMutableTreeNode("yellow"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("sports");
+						node_1.add(new DefaultMutableTreeNode("basketball"));
+						node_1.add(new DefaultMutableTreeNode("soccer"));
+						node_1.add(new DefaultMutableTreeNode("football"));
+						node_1.add(new DefaultMutableTreeNode("hockey"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("food");
+						node_1.add(new DefaultMutableTreeNode("hot dogs"));
+						node_1.add(new DefaultMutableTreeNode("pizza"));
+						node_1.add(new DefaultMutableTreeNode("ravioli"));
+						node_1.add(new DefaultMutableTreeNode("bananas"));
+					add(node_1);
+				}
+			}
+		));
 		
-		btnAtras = new JButton("Atras");
-		btnAtras.setBackground(Color.ORANGE);
-		btnAtras.setFont(new Font("Tahoma", Font.BOLD, 8));
-		btnAtras.setBounds(244, 155, 75, 23);
-		pnlCliente.add(btnAtras);
+		pnlArbolSeleccionados_1 = new JPanel();
+		pnlArbolSeleccionados_1.setBounds(171, 56, 149, 190);
+		pnlCliente.add(pnlArbolSeleccionados_1);
+		pnlArbolSeleccionados_1.setLayout(null);
 		
-		cmbSeleccionarDirectorio = new JComboBox();
-		cmbSeleccionarDirectorio.setBounds(10, 154, 129, 22);
-		pnlCliente.add(cmbSeleccionarDirectorio);
-		
-		comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(10, 223, 129, 22);
-		pnlCliente.add(comboBox_1);
-		
-		lblArchivos = new JLabel("Selecionar Archivos");
-		lblArchivos.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblArchivos.setBounds(10, 198, 129, 14);
-		pnlCliente.add(lblArchivos);
-		
-		btnAñadir = new JButton("A\u00F1adir");
-		btnAñadir.setForeground(Color.BLACK);
-		btnAñadir.setFont(new Font("Tahoma", Font.BOLD, 8));
-		btnAñadir.setBackground(Color.GREEN);
-		btnAñadir.setBounds(160, 223, 75, 23);
-		pnlCliente.add(btnAñadir);
-		
-		btnEliminar = new JButton("Eliminar");
-		btnEliminar.setFont(new Font("Tahoma", Font.BOLD, 8));
-		btnEliminar.setBackground(Color.ORANGE);
-		btnEliminar.setBounds(244, 223, 75, 23);
-		pnlCliente.add(btnEliminar);
+		tree_3 = new JTree();
+		tree_3.setBounds(0, 0, 149, 190);
+		pnlArbolSeleccionados_1.add(tree_3);
 		
 		pnlServidor = new JPanel();
 		pnlServidor.setBackground(Color.DARK_GRAY);
@@ -243,7 +244,7 @@ public class InterfazDirectorio {
 		pnlServidor.setLayout(null);
 		
 		JLabel lblServidor = new JLabel("Servidor");
-		lblServidor.setBounds(137, 11, 48, 14);
+		lblServidor.setBounds(21, 11, 295, 14);
 		lblServidor.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblServidor.setHorizontalAlignment(SwingConstants.CENTER);
 		lblServidor.setForeground(Color.WHITE);
@@ -252,7 +253,7 @@ public class InterfazDirectorio {
 		lblClientesConectados = new JLabel("Clientes Conectados");
 		lblClientesConectados.setForeground(Color.WHITE);
 		lblClientesConectados.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblClientesConectados.setBounds(21, 98, 106, 14);
+		lblClientesConectados.setBounds(21, 39, 106, 14);
 		pnlServidor.add(lblClientesConectados);
 		
 		JComboBox cmbClientesConectados = new JComboBox();
@@ -266,6 +267,7 @@ public class InterfazDirectorio {
 		pnlServidor.add(lblRecursosClonaados);
 		
 		txfRecursosClonados = new JTextField();
+		txfRecursosClonados.setEditable(false);
 		txfRecursosClonados.setBounds(137, 65, 179, 288);
 		pnlServidor.add(txfRecursosClonados);
 		txfRecursosClonados.setColumns(10);
@@ -278,7 +280,8 @@ public class InterfazDirectorio {
 		pnlServidor.add(btnExpulsar);
 		
 		textField = new JTextField();
-		textField.setBounds(21, 123, 106, 127);
+		textField.setEditable(false);
+		textField.setBounds(21, 64, 106, 186);
 		pnlServidor.add(textField);
 		textField.setColumns(10);
 		
@@ -289,23 +292,10 @@ public class InterfazDirectorio {
 		lblExpulsarClientes.setBounds(21, 261, 106, 14);
 		pnlServidor.add(lblExpulsarClientes);
 		
-		lblTuIpPublica = new JLabel("Tu IP Publica");
-		lblTuIpPublica.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTuIpPublica.setForeground(Color.WHITE);
-		lblTuIpPublica.setFont(new Font("Tahoma", Font.BOLD, 10));
-		lblTuIpPublica.setBounds(20, 39, 106, 14);
-		pnlServidor.add(lblTuIpPublica);
-		
-		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setColumns(10);
-		textField_1.setBounds(20, 65, 106, 22);
-		pnlServidor.add(textField_1);
-		
 		btnConectar = new JButton("Conectar");
 		btnConectar.setBounds(326, 9, 92, 23);
 		frame.getContentPane().add(btnConectar);
-
+		btnConectar.addItemListener(l->btnConectarClick(l));
 	}
 
 
@@ -409,6 +399,26 @@ public class InterfazDirectorio {
 					this.pnlServidor.show();
 					this.pnlCliente.hide();
 				}
+			}
+		}
+	}
+	
+	private void btnConectarClick(ItemEvent l) {
+
+		// si no ha seleccionado modo error
+		if (this.chbmodoCliente.getState() && this.chbModoServidor.getState()) {
+			JOptionPane.showMessageDialog(null, "Error", "No puede activar ambos modos a la vez", 0, null);
+
+		}
+
+		else {
+			// si esta el modo cliente
+			if (this.chbmodoCliente.getState()) {
+
+			}
+			// ModoServidor
+			else {
+
 			}
 		}
 
