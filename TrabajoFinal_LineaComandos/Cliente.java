@@ -42,7 +42,7 @@ public class Cliente {
 
 			Scanner es = new Scanner(System.in);
 			boolean end=true;
-			Socket s = new Socket("192.168.0.88",1111);
+			Socket s = new Socket("192.168.0.138",1111);
 			DataInputStream dis = null;
 			DataOutputStream dos = null;
 			while(end && !s.isClosed()) {
@@ -145,6 +145,6 @@ public class Cliente {
 			ZipUses.UnzipDirectory(path+"\\a.zip",path);
 			File f = new File(path+"\\a.zip");
 			f.delete();
-	}
 	
+	}
 }

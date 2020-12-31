@@ -52,9 +52,8 @@ public class Servidor extends Thread{
 					s = ss.accept();
 					clientes.add(s);
 					Servidor_Hilo hilo = new Servidor_Hilo(s);
-					Runnable runnable = hilo;
-					Thread t = new Thread(runnable);
-					pool.execute(t);
+						
+					pool.execute(hilo);
 					for (Socket n : clientes) {
 						if (!n.isConnected()) {
 							clientes.remove(n);
@@ -65,7 +64,9 @@ public class Servidor extends Thread{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
+			
 		}
-		apagar();
+		
 	}
 }
