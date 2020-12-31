@@ -286,6 +286,7 @@ public class InterfazDirectorio {
 //				this.servidor.eliminameEsteMAn(cmbClientesConectados.getSelectedItem());
 //			}
 //		});
+
 		btnExpulsar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnExpulsar.setBackground(Color.RED);
 		btnExpulsar.setForeground(new Color(0, 0, 0));
