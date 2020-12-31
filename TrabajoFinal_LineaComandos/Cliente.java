@@ -42,7 +42,7 @@ public class Cliente {
 
 			Scanner es = new Scanner(System.in);
 			boolean end=true;
-			Socket s = new Socket("5.225.247.38",1111);
+			Socket s = new Socket("192.168.0.88",1111);
 			DataInputStream dis = null;
 			DataOutputStream dos = null;
 			while(end && !s.isClosed()) {
