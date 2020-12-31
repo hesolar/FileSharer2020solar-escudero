@@ -465,14 +465,5 @@ public class InterfazDirectorio {
 		}
 	}
 	
-	private void actualizarlistaClientes() {
-		if(this.servidor!=null) {
-			this.cmbClientesConectados.removeAll();
-			for(Socket s : this.servidor.getClientes()){
-				if(s!=null && s.isConnected()) {
-					this.cmbClientesConectados.addItem(s.getInetAddress().getHostName()+" "+s.getInetAddress().getHostAddress());
-				}
-			}
-		}
-	}
+	
 }
