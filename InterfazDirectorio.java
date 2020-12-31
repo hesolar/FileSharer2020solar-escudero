@@ -40,6 +40,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.Dialog.ModalExclusionType;
 import java.awt.Window.Type;
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import javax.swing.JScrollPane;
 
 public class InterfazDirectorio {
 	
@@ -68,7 +71,6 @@ public class InterfazDirectorio {
 	private JTable table;
 	private JLabel lblFicheroOrigen;
 	private JButton btnClonar;
-	private JPanel pnlArbolSeleccionados;
 	private JPanel pnlArbolSeleccionados_1;
 	private JTree tree_3;
 	
@@ -183,7 +185,7 @@ public class InterfazDirectorio {
 		lblSeleccionarDestino = new JLabel("Fichero Destino");
 		lblSeleccionarDestino.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSeleccionarDestino.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblSeleccionarDestino.setBounds(10, 36, 142, 14);
+		lblSeleccionarDestino.setBounds(10, 45, 109, 14);
 		pnlCliente.add(lblSeleccionarDestino);
 		
 		table = new JTable();
@@ -193,57 +195,37 @@ public class InterfazDirectorio {
 		lblFicheroOrigen = new JLabel("Seleccionar Archivos ");
 		lblFicheroOrigen.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFicheroOrigen.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblFicheroOrigen.setBounds(178, 36, 142, 14);
+		lblFicheroOrigen.setBounds(97, 81, 142, 14);
 		pnlCliente.add(lblFicheroOrigen);
 		
 		btnClonar = new JButton("Clonar");
 		btnClonar.setBackground(Color.GREEN);
 		btnClonar.setForeground(Color.BLACK);
-		btnClonar.setBounds(120, 327, 89, 39);
+		btnClonar.setBounds(37, 327, 109, 29);
 		pnlCliente.add(btnClonar);
 		
-		pnlArbolSeleccionados = new JPanel();
-		pnlArbolSeleccionados.setBounds(10, 56, 149, 260);
-		pnlCliente.add(pnlArbolSeleccionados);
-		pnlArbolSeleccionados.setLayout(null);
+		JComboBox comboBox = new JComboBox();
+		comboBox.setEditable(true);
+		comboBox.setBounds(129, 41, 181, 23);
+		pnlCliente.add(comboBox);
 		
-		JTree treDestino = new JTree();
-		treDestino.setBounds(0, 0, 149, 260);
-		pnlArbolSeleccionados.add(treDestino);
-		treDestino.setModel(new DefaultTreeModel(
-			new DefaultMutableTreeNode("C://") {
-				{
-					DefaultMutableTreeNode node_1;
-					node_1 = new DefaultMutableTreeNode("colors");
-						node_1.add(new DefaultMutableTreeNode("blue"));
-						node_1.add(new DefaultMutableTreeNode("violet"));
-						node_1.add(new DefaultMutableTreeNode("red"));
-						node_1.add(new DefaultMutableTreeNode("yellow"));
-					add(node_1);
-					node_1 = new DefaultMutableTreeNode("sports");
-						node_1.add(new DefaultMutableTreeNode("basketball"));
-						node_1.add(new DefaultMutableTreeNode("soccer"));
-						node_1.add(new DefaultMutableTreeNode("football"));
-						node_1.add(new DefaultMutableTreeNode("hockey"));
-					add(node_1);
-					node_1 = new DefaultMutableTreeNode("food");
-						node_1.add(new DefaultMutableTreeNode("hot dogs"));
-						node_1.add(new DefaultMutableTreeNode("pizza"));
-						node_1.add(new DefaultMutableTreeNode("ravioli"));
-						node_1.add(new DefaultMutableTreeNode("bananas"));
-					add(node_1);
-				}
-			}
-		));
+		JButton btnDesconectar = new JButton("Desconectar");
+		btnDesconectar.setBackground(Color.RED);
+		btnDesconectar.setBounds(183, 327, 109, 29);
+		pnlCliente.add(btnDesconectar);
 		
 		pnlArbolSeleccionados_1 = new JPanel();
-		pnlArbolSeleccionados_1.setBounds(171, 56, 149, 260);
+		pnlArbolSeleccionados_1.setBounds(10, 106, 310, 210);
 		pnlCliente.add(pnlArbolSeleccionados_1);
 		pnlArbolSeleccionados_1.setLayout(null);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 0, 310, 210);
+		pnlArbolSeleccionados_1.add(scrollPane);
+		
 		tree_3 = new JTree();
-		tree_3.setBounds(0, 0, 149, 260);
-		pnlArbolSeleccionados_1.add(tree_3);
+		scrollPane.setViewportView(tree_3);
+		tree_3.setVisibleRowCount(50);
 		
 		pnlServidor = new JPanel();
 		pnlServidor.setBackground(Color.DARK_GRAY);
@@ -322,38 +304,44 @@ public class InterfazDirectorio {
 
 
 	//comprueba que los formatos sean correctos
-	private boolean ComprobarPuertoIp() {
+	private boolean ComprobarPuerto() {
+		if(this.txfPuerto.getText().length()==0) return false;
+		Integer port = Integer.parseInt(this.txfPuerto.getText());
+		return true;
+	}
+	
+	private boolean ComprobarIp() {
 		
 		try {
 			byte[] b= new byte[]{};
 			String contenido;
 			
 			contenido=this.txfIP1.getText();
-			if(contenido.length()==0)throw new NumberFormatException();
+			if(contenido.length()==0) return false;
 			CA.NumeroCorrecto(contenido);
 			b[0]=(byte) Integer.parseInt(contenido);
 			
 			
 			contenido=this.txfIP2.getText();
-			if(contenido.length()==0)throw new NumberFormatException();
+			if(contenido.length()==0) return false;
 			CA.NumeroCorrecto(contenido);
 			b[1]=(byte) Integer.parseInt(contenido);
 			
 			
 			contenido=this.txfIP3.getText();
-			if(contenido.length()==0)throw new NumberFormatException();
+			if(contenido.length()==0) return false;
 			CA.NumeroCorrecto(contenido);
 			b[2]=(byte) Integer.parseInt(contenido);
 			
 			
 			contenido=this.txfIP4.getText();
-			if(contenido.length()==0)throw new NumberFormatException();
+			if(contenido.length()==0) return false;
 			CA.NumeroCorrecto(contenido);
 			b[3]=(byte) Integer.parseInt(contenido);
 		
 
 			Integer port = Integer.parseInt(this.txfPuerto.getText());
-			if(this.txfPuerto.getText().length()==0)throw new NumberFormatException();
+			if(this.txfPuerto.getText().length()==0) return false;
 
 			CA.NumeroCorrecto(port);
 		
@@ -406,6 +394,9 @@ public class InterfazDirectorio {
 			this.lblEstado.setText("Apagado");
 			this.lblEstado.setForeground(Color.RED);
 			if (!this.chbmodoCliente.getState() && !this.chbModoServidor.getState()) {
+				this.btnConectar.enable(true);
+				if(this.servidor!=null)this.servidor.apagar();;
+				this.btnConectar.show();
 				this.pnlCliente.show();
 				this.pnlServidor.show();
 
@@ -442,7 +433,7 @@ public class InterfazDirectorio {
 		// si no ha seleccionado modo error
 		if (!this.chbmodoCliente.getState() && !this.chbModoServidor.getState()) {
 			JOptionPane.showMessageDialog(null, "Debe seleccionar un modo", "Error", 0, null);
-
+			
 		}
 
 		else {
@@ -452,18 +443,24 @@ public class InterfazDirectorio {
 			}
 			// ModoServidor
 			else {
-				this.servidor = new Servidor(Integer.parseInt(this.txfPuerto.getText()));
-				servidor.start();
-				
-				String IP= CA.ipPublica();
-				System.out.println(IP);
-				String[] IPublica = IP.split("\\.");
-				this.txfIP1.setText(IPublica[0]); this.txfIP1.enable(false);
-				this.txfIP2.setText(IPublica[1]); this.txfIP2.enable(false);
-				this.txfIP3.setText(IPublica[2]); this.txfIP3.enable(false);
-				this.txfIP4.setText(IPublica[3]); this.txfIP4.enable(false);
-				this.lblEstado.setText("Encendido");
-				this.lblEstado.setForeground(Color.GREEN);
+				if(this.ComprobarPuerto()) {
+					this.txfPuerto.setBackground(Color.white);
+					this.servidor = new Servidor(Integer.parseInt(this.txfPuerto.getText()));
+					this.btnConectar.hide();
+					servidor.start();
+					String IP= CA.ipPublica();
+					System.out.println(IP);
+					String[] IPublica = IP.split("\\.");
+					this.txfIP1.setText(IPublica[0]); this.txfIP1.enable(false);
+					this.txfIP2.setText(IPublica[1]); this.txfIP2.enable(false);
+					this.txfIP3.setText(IPublica[2]); this.txfIP3.enable(false);
+					this.txfIP4.setText(IPublica[3]); this.txfIP4.enable(false);
+					this.lblEstado.setText("Encendido");
+					this.lblEstado.setForeground(Color.GREEN);
+				}else {
+					JOptionPane.showMessageDialog(null, "El puerto es incorrecto o esta en uso", "Error", 0, null);
+					this.txfPuerto.setBackground(Color.LIGHT_GRAY);
+				}
 			}
 		}
 	}
