@@ -1,4 +1,4 @@
-package TrabajoFinal_LineaComandos;
+package content;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -10,10 +10,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-//clase con métodos auxiliares para no estorbar
+//clase con m?todos auxiliares para no estorbar
 public class CA {
 
-	// comprueba si el número puede formar parte de una ipcorrecta
+	// comprueba si el n?mero puede formar parte de una ipcorrecta
 	public static Boolean NumeroCorrecto(Integer i) throws NumberFormatException {
 
 		if (i < 255 && i > 0 && i != null)
@@ -91,12 +91,20 @@ public class CA {
 
 			if (f.listFiles() != null) {
 				dos.writeBytes("Directorio: " + f.getPath() + "\r\n");
+				dos.writeBytes("Listado de directorios:\r\n");
+				
+				for (File x : f.listFiles()) {				
+					if(f.isDirectory()) dos.writeBytes(x.getName() + "\r\n");
+				}
+				dos.writeBytes("\r\n");
+				dos.writeBytes("Listado de Archivos: " +"\r\n");
+
 				for (File x : f.listFiles()) {
-					dos.writeBytes(x.getName() + "\r\n");
+					if(!f.isDirectory()) dos.writeBytes(x.getName() + "\r\n");				
 				}
 				dos.flush();
 			} else
-				dos.writeBytes("vacio" + "\r\n");
+				dos.writeBytes("Este directorio esta vacio" + "\r\n");
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -120,17 +128,8 @@ public class CA {
 
 	}
 
-	// Ruta absoluta: se indica toda la ruta del archivo incluyendo el directorio
-	// raíz. Por ejemplo, C:\carpeta1\carpeta2\archivo1.doc
-
-	// Ruta relativa: se indica la ruta a partir de donde este en ese momento
-	// situado. No se incluye el directorio raíz. Por ejemplo, si estamos en la ruta
-	// C:\carpeta1 y queremos acceder al archivo1 que esta dentro de la carpeta2,
-	// seria carpeta2\archivo1.
-	// Para ir al directorio padre, usamos dos puntos seguidos (..)
-
 //	*si directorio tipo: cd c\\users\\usuario  el path es directamente es c\\users\\usuario
-//	*si  llega : cd usuario , añadiremos al path la nueva subcarpeta : path\\usuario
+//	*si  llega : cd usuario , a?adiremos al path la nueva subcarpeta : path\\usuario
 	public static String conversorDireccionesAbsolutas(String ruta, String dirRaiz) {
 
 		if (ruta.contains("\\"))
@@ -140,7 +139,7 @@ public class CA {
 
 	}
 
-	// dada una dirección absoluta c\\users\\usuario devuelve usuario
+	// dada una direccion absoluta c\\users\\usuario devuelve usuario
 	public static String conversorDireccionesRelativas(String ruta) {
 
 		if (ruta.contains("\\")) {
@@ -157,25 +156,23 @@ public class CA {
 
 	public static String CortarFichero(String Linea) {
 
-		System.out.println(Linea);
-		String ListaEspacios[] = Linea.split(" ",2);
+		String ListaEspacios[] = Linea.split(" ", 2);
 
-		
 		return ListaEspacios[1];
 
 	}
 
+//Dado un comando orden - parámetro devuelve la orden.
 	public static String CortarOrden(String Linea) {
 
-		System.out.println(Linea);
-		String ListaEspacios[] = Linea.split(" ",2);
+		String ListaEspacios[] = Linea.split(" ", 2);
 
-		
 		return ListaEspacios[0];
 
 	}
 	
-	 public static String ipPublica() {
+	//Devuelve la ip Publica usando un servicio web
+	public static String ipPublica() {
 		URL whatismyip;
 		String ip = "No se pudo obtener ip pública";
 		BufferedReader in=null;
@@ -192,4 +189,10 @@ public class CA {
 			return ip;
 		}
 	 }
+	
+	
+	
+	
+	
+	
 }
